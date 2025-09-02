@@ -1,1 +1,9 @@
-{"code":"rate-limited","message":"You have hit the rate limit. Please upgrade to keep chatting.","providerLimitHit":false,"isRetryable":true}
+import React from 'react';
+
+export const Message: React.FC = () => {
+  return (
+    <div>
+      {/* Message content will go here */}
+    </div>
+  );
+};
