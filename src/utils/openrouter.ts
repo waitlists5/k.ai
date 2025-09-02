@@ -1,4 +1,4 @@
-const OPENROUTER_API_KEY = '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';
+const OPENROUTER_API_KEY = 'your-openrouter-api-key-here';
 const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 
 // Using Llama 3.1 70B Instruct - one of the best free models available
