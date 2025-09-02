@@ -139,14 +139,14 @@ export const useChat = () => {
       }
       
       // Update with error message
-      const errorMessage = {
+      const errorAssistantMessage = {
         ...assistantMessage,
         content: errorMessage,
         isLoading: false
       };
 
       const currentMessages = [...updatedMessages];
-      currentMessages[currentMessages.length - 1] = errorMessage;
+      currentMessages[currentMessages.length - 1] = errorAssistantMessage;
 
       updateConversation(conversation.id, {
         messages: currentMessages
