@@ -129,7 +129,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
 
       <SettingsPanel
         settings={settings}
-        onSave={updateSettings}
+        onSave={onUpdateSettings}
         onClose={() => setShowSettings(false)}
         isOpen={showSettings}
       />
