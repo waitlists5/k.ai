@@ -126,10 +126,22 @@ export const useChat = () => {
     } catch (error) {
       console.error('Error sending message:', error);
       
+      let errorMessage = 'Sorry, I encountered an error processing your request. Please try again.';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('Authentication failed') || error.message.includes('API key')) {
+          errorMessage = 'API authentication failed. Please check your OpenRouter API key in the environment variables.';
+        } else if (error.message.includes('Rate limit')) {
+          errorMessage = 'Rate limit exceeded. Please wait a moment before trying again.';
+        } else if (error.message.includes('not configured')) {
+          errorMessage = 'OpenRouter API key is not configured. Please set up your API key to use the chat feature.';
+        }
+      }
+      
       // Update with error message
       const errorMessage = {
         ...assistantMessage,
-        content: 'Sorry, I encountered an error processing your request. Please try again.',
+        content: errorMessage,
         isLoading: false
       };
 

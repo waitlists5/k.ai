@@ -1,22 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowUp, Square, Plus, Mic } from 'lucide-react';
 import { PromptEnhancer } from './PromptEnhancer';
+import { SettingsPanel } from './SettingsPanel';
+import { ChatSettings } from '../types/chat';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
   onStopGeneration: () => void;
   onNewChat: () => void;
   isLoading: boolean;
+  settings: ChatSettings;
+  onUpdateSettings: (settings: ChatSettings) => void;
 }
 
 export const ChatInput: React.FC<ChatInputProps> = ({
   onSendMessage,
   onStopGeneration,
   onNewChat,
-  isLoading
+  isLoading,
+  settings,
+  onUpdateSettings
 }) => {
   const [message, setMessage] = useState('');
   const [showEnhancer, setShowEnhancer] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {

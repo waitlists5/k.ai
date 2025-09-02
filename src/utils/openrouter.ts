@@ -1,4 +1,4 @@
-const OPENROUTER_API_KEY = 'your-openrouter-api-key-here';
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || '';
 const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
 
 // Using Llama 3.1 70B Instruct - one of the best free models available
@@ -32,6 +32,10 @@ export class OpenRouterAPI {
       maxTokens = 4000
     } = options;
 
+    if (!this.apiKey) {
+      throw new Error('OpenRouter API key is not configured. Please set VITE_OPENROUTER_API_KEY in your environment variables.');
+    }
+
     try {
       const response = await fetch(`${this.baseUrl}/chat/completions`, {
         method: 'POST',
@@ -51,7 +55,20 @@ export class OpenRouterAPI {
       });
 
       if (!response.ok) {
-        throw new Error(`OpenRouter API error: ${response.status}`);
+        const errorText = await response.text();
+        console.error('OpenRouter API Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText
+        });
+        
+        if (response.status === 401) {
+          throw new Error('Authentication failed. Please check your OpenRouter API key.');
+        } else if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        } else {
+          throw new Error(`OpenRouter API error: ${response.status} - ${response.statusText}`);
+        }
       }
 
       const reader = response.body?.getReader();
@@ -90,11 +107,19 @@ export class OpenRouterAPI {
       }
     } catch (error) {
       console.error('Stream chat error:', error);
+      if (error instanceof Error && error.message.includes('Authentication failed')) {
+        throw new Error('API authentication failed. Please verify your OpenRouter API key is valid and not expired.');
+      }
       throw error;
     }
   }
 
   async enhancePrompt(prompt: string): Promise<string> {
+    if (!this.apiKey) {
+      console.warn('OpenRouter API key not configured, skipping prompt enhancement');
+      return prompt;
+    }
+
     const enhancementMessages: ChatMessage[] = [
       {
         role: 'system',

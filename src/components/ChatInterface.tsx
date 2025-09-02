@@ -99,15 +99,11 @@ export const ChatInterface: React.FC = () => {
           onStopGeneration={stopGeneration}
           isLoading={isLoading}
           onNewChat={handleNewChat}
+          settings={settings}
+          onUpdateSettings={updateSettings}
         />
       </div>
 
-      <SettingsPanel
-        settings={settings}
-        onSave={updateSettings}
-        onClose={() => setShowSettings(false)}
-        isOpen={showSettings}
-      />
     </div>
   );
 };
